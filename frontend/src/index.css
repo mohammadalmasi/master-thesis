@@ -1,0 +1,188 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;500;600&display=swap');
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #a8a8a8;
+}
+
+/* Custom components */
+@layer components {
+  .btn-primary {
+    @apply bg-primary-600 hover:bg-primary-700 text-white font-medium py-2 px-4 rounded-lg transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+  
+  .btn-secondary {
+    @apply bg-gray-100 hover:bg-gray-200 text-gray-800 font-medium py-2 px-4 rounded-lg transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+  
+  .btn-danger {
+    @apply bg-danger-600 hover:bg-danger-700 text-white font-medium py-2 px-4 rounded-lg transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+  
+  .input-field {
+    @apply w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all duration-200;
+  }
+  
+  .textarea-field {
+    @apply w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all duration-200 resize-y;
+  }
+  
+  .card {
+    @apply bg-white rounded-lg shadow-lg border border-gray-200 overflow-hidden;
+  }
+  
+  .card-header {
+    @apply px-6 py-4 border-b border-gray-200 bg-gray-50;
+  }
+  
+  .card-body {
+    @apply px-6 py-4;
+  }
+  
+  .vulnerability-high {
+    @apply bg-danger-50 border-l-4 border-danger-500 text-danger-900;
+  }
+  
+  .vulnerability-medium {
+    @apply bg-warning-50 border-l-4 border-warning-500 text-warning-900;
+  }
+  
+  .vulnerability-low {
+    @apply bg-success-50 border-l-4 border-success-500 text-success-900;
+  }
+  
+  .code-block {
+    @apply bg-gray-900 text-gray-100 p-4 rounded-lg overflow-x-auto font-mono text-sm;
+  }
+  
+  .loading-spinner {
+    @apply animate-spin rounded-full h-8 w-8 border-b-2 border-primary-600;
+  }
+}
+
+/* Animation utilities */
+@layer utilities {
+  .animate-fade-in {
+    animation: fadeIn 0.5s ease-in-out;
+  }
+  
+  .animate-slide-up {
+    animation: slideUp 0.3s ease-out;
+  }
+  
+  .animate-pulse-slow {
+    animation: pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  }
+}
+
+/* Global styles */
+body {
+  font-family: 'Inter', sans-serif;
+  @apply bg-gray-50 text-gray-900;
+}
+
+.font-mono {
+  font-family: 'Fira Code', Monaco, 'Cascadia Code', 'Roboto Mono', monospace;
+}
+
+/* Custom highlight for vulnerabilities */
+.vulnerability-highlight {
+  @apply bg-danger-200 text-danger-900 font-semibold px-1 py-0.5 rounded;
+}
+
+/* Vulnerability highlighting in source code */
+.vuln {
+  color: #ff6b6b !important;
+  background-color: rgba(239, 68, 68, 0.2) !important;
+  font-weight: bold !important;
+  padding: 2px 4px !important;
+  border-radius: 4px !important;
+  border: 1px solid rgba(239, 68, 68, 0.4) !important;
+  box-shadow: 0 0 0 1px rgba(239, 68, 68, 0.1) !important;
+  text-shadow: 0 0 2px rgba(239, 68, 68, 0.5) !important;
+}
+
+/* Enhanced code content styling */
+.code-content {
+  tab-size: 2;
+  text-align: left !important;
+  white-space: pre !important;
+  word-wrap: normal !important;
+  text-indent: 0 !important;
+}
+
+.code-content .vuln:hover {
+  background-color: rgba(239, 68, 68, 0.3) !important;
+  border-color: rgba(239, 68, 68, 0.6) !important;
+  box-shadow: 0 0 0 2px rgba(239, 68, 68, 0.2) !important;
+  cursor: help;
+}
+
+/* CSRF vulnerability highlighting */
+.code-content .csrf-vuln-high {
+  background-color: #dc2626 !important;
+  color: #ffffff !important;
+  padding: 2px 4px;
+  border-radius: 3px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.code-content .csrf-vuln-high:hover {
+  background-color: #b91c1c !important;
+}
+
+.code-content .csrf-vuln-medium {
+  background-color: #f59e0b !important;
+  color: #000000 !important;
+  padding: 2px 4px;
+  border-radius: 3px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.code-content .csrf-vuln-medium:hover {
+  background-color: #d97706 !important;
+}
+
+.code-content .csrf-vuln-low {
+  background-color: #10b981 !important;
+  color: #000000 !important;
+  padding: 2px 4px;
+  border-radius: 3px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.code-content .csrf-vuln-low:hover {
+  background-color: #059669 !important;
+}
+
+/* Responsive design utilities */
+@media (max-width: 640px) {
+  .card-body {
+    @apply px-4 py-3;
+  }
+  
+  .card-header {
+    @apply px-4 py-3;
+  }
+}

@@ -1,0 +1,97 @@
+steps:
+  # Install backend dependencies and deploy backend
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    entrypoint: 'bash'
+    args:
+      - '-c'
+      - |
+        echo "🐍 Deploying Flask Backend..."
+        cd backend
+        gcloud app deploy app.yaml --quiet
+        echo "✅ Backend deployed successfully"
+    id: 'deploy-backend'
+
+  # Install frontend dependencies
+  - name: 'node:18'
+    entrypoint: 'bash'
+    args:
+      - '-c'
+      - |
+        echo "📦 Installing frontend dependencies..."
+        cd frontend
+        npm install
+        echo "✅ Dependencies installed"
+    id: 'install-frontend-deps'
+
+  # Update frontend configuration with backend URL
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    entrypoint: 'bash'
+    args:
+      - '-c'
+      - |
+        echo "🔧 Updating frontend configuration..."
+        cd frontend
+        BACKEND_URL="https://$(gcloud app describe --format='value(defaultHostname)')"
+        sed -i "s|https://your-app-name.appspot.com|$BACKEND_URL|g" src/config.js
+        echo "✅ Updated API endpoint to: $BACKEND_URL"
+    id: 'update-frontend-config'
+    waitFor: ['deploy-backend']
+
+  # Build React app
+  - name: 'node:18'
+    entrypoint: 'bash'
+    args:
+      - '-c'
+      - |
+        echo "🏗️ Building React app..."
+        cd frontend
+        npm run build
+        echo "✅ React app built successfully"
+    id: 'build-frontend'
+    waitFor: ['install-frontend-deps', 'update-frontend-config']
+
+  # Deploy frontend
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    entrypoint: 'bash'
+    args:
+      - '-c'
+      - |
+        echo "🚀 Deploying frontend to App Engine..."
+        cd frontend
+        gcloud app deploy app.yaml --quiet
+        echo "✅ Frontend deployed successfully"
+    id: 'deploy-frontend'
+    waitFor: ['build-frontend']
+
+  # Final success message
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    entrypoint: 'bash'
+    args:
+      - '-c'
+      - |
+        echo "🎉 Deployment Complete!"
+        echo "===================="
+        FRONTEND_URL="https://$(gcloud app describe --format='value(defaultHostname)')"
+        echo "Frontend App: $FRONTEND_URL"
+        echo "Admin Console: https://console.cloud.google.com/appengine"
+        echo "✅ Your SQL Injection Scanner is now live on Google Cloud Platform!"
+    id: 'deployment-complete'
+    waitFor: ['deploy-frontend']
+
+# Build configuration
+options:
+  # Use a machine with more memory for the build
+  machineType: 'E2_HIGHCPU_8'
+
+# Set a longer timeout for the build
+timeout: '1200s'
+
+# Substitutions (can be overridden during manual builds)
+substitutions:
+  _PROJECT_ID: '${PROJECT_ID}'
+  _REGION: 'us-central1'
+
+# IAM permissions required:
+# - App Engine Admin
+# - Cloud Build Service Account
+# - Storage Admin (for deployment artifacts) 

@@ -1,0 +1,29 @@
+runtime: nodejs20
+
+handlers:
+# Serve static files
+- url: /static
+  static_dir: build/static
+
+# Serve the favicon
+- url: /favicon.ico
+  static_files: build/favicon.ico
+  upload: build/favicon.ico
+
+# Serve the manifest
+- url: /manifest.json
+  static_files: build/manifest.json
+  upload: build/manifest.json
+
+# Serve other static assets
+- url: /.*\.(js|css|png|jpg|jpeg|gif|ico|svg)$
+  static_files: build/\1
+  upload: build/.*\.(js|css|png|jpg|jpeg|gif|ico|svg)$
+
+# Serve the React app for all other routes
+- url: /.*
+  static_files: build/index.html
+  upload: build/index.html
+
+env_variables:
+  NODE_ENV: production 

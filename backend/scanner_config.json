@@ -1,0 +1,9 @@
+{
+  "scanners": {
+    "sql_injection": 1,
+    "xss": 1,
+    "command_injection": 1,
+    "csrf": 1
+  },
+  "description": "Configuration file to enable/disable scanners. 1 = enabled, 0 = disabled"
+} 
