@@ -51,3 +51,6 @@ results/
 
 # Node modules (for frontend)
 node_modules/ 
+# Local virtualenvs
+backend/mlvenv/
+atiqullah-ahmadzai/ml310/
