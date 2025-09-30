@@ -29,6 +29,7 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
+    "prestart": "echo \"Cleaning caches...\" && rm -rf node_modules/.cache .cache",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
