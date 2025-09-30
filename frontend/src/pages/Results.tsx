@@ -148,6 +148,36 @@ const Results: React.FC = () => {
     if (!results) return;
     
     try {
+      // ML report path mirrors static: if ML, call ML endpoint
+      if (results.analysisMode === 'ml') {
+        const mlPayload: any = {
+          upload_id: results.upload_id,
+          image_url: results.image_url,
+          filename: results.file_name || scanInput?.filename || 'code.py',
+          original_code: results.original_code || scanInput?.content || '',
+          scanner_type: results.scannerType || 'ml'
+        };
+
+        const mlResp = await fetch(`${config.API_BASE_URL}/api/generate-ml-report`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(mlPayload)
+        });
+        if (!mlResp.ok) throw new Error('Failed to generate ML report');
+        const blob = await mlResp.blob();
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        const cd = mlResp.headers.get('Content-Disposition');
+        let filename = cd && /filename="?([^"]+)"?/.exec(cd)?.[1] || `ml-security-report-${new Date().toISOString().split('T')[0]}.docx`;
+        a.download = filename;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+        return;
+      }
+
       const reportData = {
         vulnerabilities: results.vulnerabilities,
         summary: results.summary,

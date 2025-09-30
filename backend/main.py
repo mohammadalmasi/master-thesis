@@ -11,6 +11,10 @@ import zipfile
 import uuid
 import subprocess
 from pathlib import Path
+from docx import Document
+from docx.shared import Inches
+from docx.enum.text import WD_ALIGN_PARAGRAPH
+from docx.enum.section import WD_ORIENT
 
 # Import XSS scanner functions
 from scanners.xss.xss_scanner import (
@@ -212,6 +216,73 @@ def get_scanner_config():
         return jsonify(config)
     except Exception as e:
         return jsonify({'error': f'Failed to load configuration: {str(e)}'}), 500
+
+# ML report generation endpoint
+@app.route('/api/generate-ml-report', methods=['POST'])
+def generate_ml_report():
+    """Generate a Word report for ML-based analysis including the visualization image."""
+    try:
+        data = request.get_json(force=True)
+        upload_id = data.get('upload_id')
+        image_url = data.get('image_url') or data.get('image')
+        original_code = data.get('original_code') or data.get('code') or ''
+        filename = data.get('filename') or data.get('file_name') or 'code.py'
+        scanner_type = (data.get('scanner_type') or data.get('type') or 'ml').upper()
+
+        if not upload_id or not image_url:
+            return jsonify({'error': 'upload_id and image_url are required'}), 400
+
+        # Expecting image_url in the form: /api/ml-output/<uid>/<filename>
+        try:
+            _, api_prefix, ml_output, uid, image_name = image_url.split('/', 4)
+            if ml_output != 'ml-output' or uid != upload_id:
+                raise ValueError('Mismatched upload id in image_url')
+        except Exception:
+            return jsonify({'error': 'image_url must be like /api/ml-output/<upload_id>/<image_file>.png'}), 400
+
+        backend_root = Path(__file__).parent
+        image_path = backend_root / 'ml' / 'api' / 'uploads' / upload_id / 'output' / image_name
+        if not image_path.exists():
+            return jsonify({'error': f'Visualization not found on server: {str(image_path)}'}), 404
+
+        # Build the document
+        doc = Document()
+        # Use landscape Letter with reasonable margins and scale image to fit page width
+        section = doc.sections[0]
+        section.orientation = WD_ORIENT.LANDSCAPE
+        section.page_width = Inches(11)
+        section.page_height = Inches(8.5)
+        section.left_margin = Inches(0.5)
+        section.right_margin = Inches(0.5)
+        section.top_margin = Inches(0.5)
+        section.bottom_margin = Inches(0.5)
+        title = doc.add_heading('ML-Based Security Analysis Report', 0)
+        title.alignment = WD_ALIGN_PARAGRAPH.CENTER
+
+        # Visualization
+        doc.add_heading('Visualization', level=1)
+        try:
+            # Fit image to available page width (about ~2x previous 6.5")
+            available_width = section.page_width - section.left_margin - section.right_margin
+            doc.add_picture(str(image_path), width=available_width)
+        except Exception:
+            # In case the image is extremely wide, add without width and let Word handle scaling
+            doc.add_picture(str(image_path))
+
+        # Save to temp file and return
+        tmp = tempfile.NamedTemporaryFile(delete=False, suffix='.docx')
+        doc.save(tmp.name)
+        tmp.close()
+
+        download_name = f"ml_security_report_{datetime.now().strftime('%Y%m%d_%H%M%S')}.docx"
+        return send_file(
+            tmp.name,
+            as_attachment=True,
+            download_name=download_name,
+            mimetype='application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+        )
+    except Exception as e:
+        return jsonify({'error': f'ML report generation error: {str(e)}'}), 500
 
 # ML-based analysis endpoint
 @app.route('/api/scan-ml', methods=['POST'])
