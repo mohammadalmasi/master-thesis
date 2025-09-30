@@ -1,0 +1,77 @@
+{% load custom_filters %}
+<ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
+
+    <!-- Sidebar - Brand -->
+    <a class="sidebar-brand d-flex align-items-center justify-content-center" href="">
+        <div class="sidebar-brand-icon rotate-n-15">
+            <i class="fa-solid fa-shield-halved"></i>
+            
+        </div>
+        <div class="sidebar-brand-text mx-3">SafePyScript</div>
+    </a>
+
+    <!-- Divider -->
+    <hr class="sidebar-divider my-0">
+
+    <!-- Nav Item - Dashboard -->
+    <li class="nav-item">
+        <a class="nav-link" href="{% url 'home' %}">
+            <i class="fas fa-fw fa-tachometer-alt"></i>
+            <span>Dashboard</span></a>
+    </li>
+
+    <!-- Divider -->
+    <hr class="sidebar-divider">
+
+    <!-- Heading -->
+    <div class="sidebar-heading">
+        AI
+    </div>
+    <li class="nav-item">
+        <a class="nav-link" href="{% url 'projects' %}">
+            <i class="fas fa-file"></i>
+            <span>Projects</span></a>
+    </li>
+
+
+    <li class="nav-item">
+        <a class="nav-link" href="{% url 'responses' %}">
+            <i class="fas fa-reply-all"></i>
+            <span>Responses</span></a>
+    </li>
+
+    <div class="sidebar-heading">
+        Manage
+    </div>
+
+    {% if request.user|is_user_admin %}
+
+    <li class="nav-item">
+        <a class="nav-link" href="{% url 'users' %}">
+            <i class="fas fa-users"></i>
+            <span>Users</span></a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="{% url 'feedbacks' %}">
+            <i class="fas fa-comment"></i>
+            <span>Feedbacks</span></a>
+    </li>
+    {% endif %}
+    <li class="nav-item">
+        <a class="nav-link" href="{% url 'contact' %}">
+            <i class="fas fa-location"></i>
+            <span>Contact Us</span></a>
+    </li>
+    <!-- Divider -->
+
+
+    <!-- Divider -->
+    <hr class="sidebar-divider d-none d-md-block">
+
+    <!-- Sidebar Toggler (Sidebar) -->
+    <div class="text-center d-none d-md-inline">
+        <button class="rounded-circle border-0" id="sidebarToggle"></button>
+    </div>
+
+
+</ul>

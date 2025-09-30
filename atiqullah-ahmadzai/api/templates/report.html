@@ -1,0 +1,141 @@
+{% load static %}
+{% load custom_filters %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+{% include 'partials/header.html' %}
+
+<body id="page-top">
+    
+    <!-- Page Wrapper -->
+    <div id="wrapper">
+
+        <!-- Sidebar -->
+
+        <!-- End of Sidebar -->
+
+        <!-- Content Wrapper -->
+        <div id="content-wrapper" class="d-flex flex-column" style="width: 80%; margin:0 auto;padding-top:20px">
+            
+            <!-- Main Content -->
+            <div id="report-main">
+
+                <!-- Topbar -->
+ 
+                <!-- End of Topbar -->
+
+                <!-- Begin Page Content -->
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-md-12">
+                            
+                            <h3 style="float:left">Report Summary</h3>
+                            <button class="download btn btn-primary" style="float:right" class="btn btn-primary">Download/Print</button>
+
+                          
+                            <table class="table table-bordered main-table">
+                                    <tr>
+                                        <th>Project Name</th>
+                                        <td>{{project.name}}</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Project Description</th>
+                                        <td>{{project.description}}</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Project Repository</th>
+                                        
+                                        <td>{% if project.repo_url %} {{project.repo_url}} {% else %} N/A {% endif %}</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Total Scans</th>
+                                        <td>{{responses|length}}</td>
+                                    </tr>
+
+                                    <tr>
+                                        <th>Total Files Uploaded</th>
+                                        <td>{{files|length}}</td>
+                                    </tr>
+
+                                    <tr>
+                                        <th>Created By</th>
+                                        <td>{{project.user.username}}</td>
+                                    </tr>
+                
+                            </table>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+
+                            <h3>List of scans</h3>
+                            <table class="table table-bordered main-table">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Model</th>
+                                        <th>File</th>
+                                        <th>Created Date</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for row in responses %}
+                                    <tr>
+                                        <th><a href="#result-{{row.id}}">{{row.id}}</a></th>
+                                        <th>{{row.model}}</th>
+                                        <th>{{row.request | extract_file_name}}</th>
+                                        <th>{{row.created_at}}</th>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+          
+                    <!-- Content Row -->
+                    <h3>Scan Detils</h3>
+                    <div class="row">
+                        {% for row in responses %}
+                           
+                            <div class="col-md-12">
+                                <h4 id="result-{{row.id}}">{{row.id}} - {{row.request | extract_file_name}}</h4>
+                                <hr>
+                            </div>
+                            
+                            <div class="col-md-12">
+                                <h5>Request</h5>
+                                <pre class="prettyprint" style="text-wrap:balance">{{row.request}}</pre>     
+                            </div>
+                            <div class="col-md-12">
+                                <h5>Response</h5>
+                                <pre class="prettyprint" style="text-wrap:balance">{{row.response | safe}}</pre>     
+                            </div>
+                        
+                        {% endfor %}
+                    </div>
+                    
+
+                </div>
+
+            </div>
+
+            <!-- Footer -->
+            {% include 'partials/footer.html' %}
+
+        </div>
+
+    </div>
+
+    <a class="scroll-to-top rounded" href="#page-top">
+        <i class="fas fa-angle-up"></i>
+    </a>
+
+    <!-- Logout Modal-->
+    {% include 'partials/modals.html' %}
+    {% include 'partials/scripts.html' %}
+
+</body>
+
+</html>

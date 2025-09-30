@@ -1,0 +1,125 @@
+{% load static %}
+
+<!-- Bootstrap core JavaScript -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.6.0/jspdf.umd.min.js"></script>
+<script src="{% static 'vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+
+<!-- Core plugin JavaScript -->
+
+
+<!-- Custom scripts for all pages -->
+<script src="{% static 'js/sb-admin-2.min.js' %}"></script>
+
+<!-- Page level plugins -->
+<script src="{% static 'vendor/chart.js/Chart.min.js' %}"></script>
+
+<!-- Page level custom scripts -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/notify/0.4.2/notify.min.js" integrity="sha512-efUTj3HdSPwWJ9gjfGR71X9cvsrthIA78/Fvd/IN+fttQVy7XWkOAXb295j8B3cmm/kFKVxjiNYzKw9IQJHIuQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.21/js/jquery.dataTables.min.js" integrity="sha512-BkpSL20WETFylMrcirBahHfSnY++H2O1W+UnEEO4yNIl+jI2+zowyoGJpbtk6bx97fBXf++WJHSSK2MV4ghPcg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://unpkg.com/dropzone@5/dist/min/dropzone.min.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+
+<!-- custom scripts -->
+<script>
+    $(document).ready(function(){
+
+        {% for message in messages %}
+            {% if message.tags == 'success' %} 
+                $.notify("{{message}}", "success");
+            {% endif %}
+
+            {% if message.tags == 'error' %} 
+                $.notify("{{message}}", "error");
+            {% endif %}
+
+        {% endfor %}
+
+        $('#profileForm').on('submit', function(e){
+            event.preventDefault();
+            var pass   = $(this).find('input[name="password"]').val();
+            var c_pass = $(this).find('input[name="confirm_password"]').val();
+            
+            if(pass != c_pass)
+            {
+                $.notify("Passwords doesn't matches", "error");
+            }
+            else
+            {
+                $(this)[0].submit()
+            }
+        });
+
+        $('#registerForm').on('submit', function(e){
+            event.preventDefault();
+            var username = $(this).find('input[name="username"]').val();
+            var email    = $(this).find('input[name="email"]').val();
+            var pass     = $(this).find('input[name="password"]').val();
+            var c_pass   = $(this).find('input[name="confirm_password"]').val();
+            
+            if(pass != c_pass)
+            {
+                $.notify("Passwords doesn't matches", "error");
+            }
+            else
+            {
+                $(this)[0].submit()
+            }
+        });
+
+
+
+        $("#copyBtnModal").click(function(){
+            event.preventDefault();
+            var text = $("#storyContents").text();
+            $.notify("Result coppied to the clipboard!", "success");
+        });
+
+        $(".updateUserBtn").click(function(){
+
+            $("#updateUserForm").find('input[name="username"]').val($(this).data("username"));
+            $("#updateUserForm").find('input[name="email"]').val($(this).data("email"));
+            $("#updateUserForm").find('input[name="user_id"]').val($(this).data("id"));
+
+            event.preventDefault();
+            $("#updateUserModal").modal('show');
+        });
+
+        $("#searchBtn").click(function(){
+            event.preventDefault();
+            text = $("#searchBox").val();
+            if(text == "")
+            {
+                $.notify("Failed! search field is empty", "error");
+            }
+            else
+            {
+                window.location = "?query="+encodeURI(text)
+            }
+        });
+
+
+        $("#has_repo").on("change",function(){
+            if($(this).val() == "Yes")
+            {
+                $("#repo_url").attr("style","display:block");
+            }
+            else
+            {
+                $("#repo_url").attr("style","display:none");
+            }
+        });
+
+        
+    });
+
+    $(document).ready(function() {
+        $('.code-files').select2({maximumSelectionLength:1});
+
+        $(".download").click(function(){
+            window.print()
+        });
+    });
+
+</script>

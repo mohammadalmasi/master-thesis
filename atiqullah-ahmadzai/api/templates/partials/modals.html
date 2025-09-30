@@ -1,0 +1,297 @@
+<!-- Logout -->
+<div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                <a class="btn btn-primary" href="{% url 'logout' %}">Logout</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Settings -->
+<div class="modal fade" id="profileModal" tabindex="-1" role="dialog" aria-labelledby="profileModal" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Profile</h5>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            
+      
+                <form action="{% url 'update_profile' %}" class="container" id="profileForm" method="POST">
+                    <br>
+                    <div class="form-group">
+                        <label>Username</label>
+                        <input type="text" placeholder="Enter username" class="form-control" value="{{ user.username }}" disabled>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Email</label>
+                        <input type="text" placeholder="Enter user's email" class="form-control" value="{{ user.email }}" disabled>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Old Password</label>
+                        <input type="password" name="old_password" placeholder="Enter old password" class="form-control" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Password</label>
+                        <input type="password" name="password" placeholder="Enter password" class="form-control" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Confirm Password</label>
+                        <input type="password" name="confirm_password" placeholder="Re-enter password" class="form-control" required>
+                    </div>
+
+                
+            
+
+                    <div class="modal-footer">
+                        <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                        <button class="btn btn-primary" type="submit">Update</button>
+                    </div>
+                    {% csrf_token %}
+                </form>
+        </div>
+    </div>
+</div>
+
+
+
+<!-- Register -->
+<div class="modal fade" id="registerUserModal" tabindex="-1" role="dialog" aria-labelledby="registerUserModal" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Register New User</h5>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            
+      
+                <form action="{% url 'register_user' %}" class="container" id="registerForm" method="POST">
+                    <br>
+                    <div class="form-group">
+                        <label>Username</label>
+                        <input type="text" placeholder="Enter username" name="username" class="form-control" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Email</label>
+                        <input type="email" placeholder="Enter user's email" name="email" class="form-control" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Password</label>
+                        <input type="password" name="password" placeholder="Enter password" class="form-control" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Confirm Password</label>
+                        <input type="password" name="confirm_password" placeholder="Re-enter password" class="form-control" required>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                        <button class="btn btn-primary" type="submit">Update</button>
+                    </div>
+                    {% csrf_token %}
+                </form>
+        </div>
+    </div>
+</div>
+
+<!-- update user -->
+<div class="modal fade" id="updateUserModal" tabindex="-1" role="dialog" aria-labelledby="updateUserModal" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Update User</h5>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            
+                <form action="{% url 'update_user' %}" class="container" id="updateUserForm" method="POST">
+                    <br>
+                    <div class="form-group">
+                        <label>Username</label>
+                        <input type="text" placeholder="Enter username" name="username" class="form-control" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Email</label>
+                        <input type="email" placeholder="Enter user's email" name="email" class="form-control" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>New Password</label>
+                        <input type="password" name="password" placeholder="Enter password" class="form-control" required>
+                    </div>
+                    <input name="user_id" type="hidden" value="0">
+                    <div class="modal-footer">
+                        <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                        <button class="btn btn-primary" type="submit">Update</button>
+                    </div>
+                    {% csrf_token %}
+                </form>
+        </div>
+    </div>
+</div>
+
+<!-- add feedback -->
+<div class="modal fade" id="addFeedbackModal" tabindex="-1" role="dialog" aria-labelledby="addFeedbackModal" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Provide Feedback</h5>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            
+                <form action="{% url 'save_feedback' %}" class="container" id="saveFeedback" method="POST">
+                    <br>
+                    <div class="form-group">
+                        <label>Subject</label>
+                        <input type="text" placeholder="Enter subject" name="subject" class="form-control" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Body</label>
+                        <textarea class="form-control" name="body" placeholder="Enter body"></textarea>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                        <button class="btn btn-primary" type="submit">Save</button>
+                    </div>
+                    {% csrf_token %}
+                </form>
+        </div>
+    </div>
+</div>
+
+<!-- add project -->
+<div class="modal fade" id="addProjectModal" tabindex="-1" role="dialog" aria-labelledby="addProjectModal" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Add New Project</h5>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            
+                <form action="{% url 'save_project' %}" class="container" id="saveProject" method="POST">
+                    <br>
+                    <div class="form-group">
+                        <label>Project Name</label>
+                        <input type="text" placeholder="Enter project name" name="name" class="form-control" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Project Description</label>
+                        <textarea class="form-control" name="description" placeholder="Enter project description"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Languages</label>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="python" checked disabled>
+                            <label class="form-check-label" for="flexCheckDefault">
+                            Python
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Has Repo</label>
+                        <select id="has_repo" name="has_repo" class="form-control">
+                            <option>No</option>
+                            <option>Yes</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group" id="repo_url" style="display:none">
+                        <label>Repo URL</label>
+                        <input type="url" class="form-control" name="repo_url" placeholder="Enter repo URL">
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                        <button class="btn btn-primary" type="submit">Save</button>
+                    </div>
+                    {% csrf_token %}
+                </form>
+        </div>
+    </div>
+</div>
+
+<!-- upload file -->
+<div class="modal fade" id="uploadFileModal" tabindex="-1" role="dialog" aria-labelledby="uploadFileModal" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Upload File (.py only)</h5>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="row container">
+                {% if project %}
+                    {% if project.has_repo == "No" %}
+                        <div class="col-md-12">
+                            <form action="{% url 'upload_file' project.id %}" class="dropzone" id="my-great-dropzone">
+                                {% csrf_token %}
+                            </form>
+                            
+                        </div>
+                    {% else %}
+                        <p>Upload manually disabled, try to create project without a repo or pull the files from the repo.</p>
+                    {% endif %}
+                {% endif%}
+                <div class="col-md-12">
+                    {% if files %}
+                    <table class="table table-hovered">
+                        <thead>
+                            <tr>
+                                <th>File Name</th>
+                                <th>File Size</th>
+                                <th>Date</th>
+                                <th>Action</th>
+                            </tr>
+                            
+                        </thead>
+                        <tbody>
+                            {% for row in files %}
+                            <tr>
+                                <td>{{row.name}}</td>
+                                <td>{{row.size}} KB</td>
+                                <td>{{row.date}}</td>
+                                <td>
+                                    <a href="{% url 'delete_file' project.id row.name %}" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                    {% endif %}
+                </div>
+            </div>
+            
+        </div>
+    </div>
+</div>
