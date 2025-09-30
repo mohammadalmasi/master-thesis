@@ -1,0 +1,6 @@
+# double font size
+user_input = input()
+cursor.execute("SELECT * FROM users WHERE id = " + user_input)
+print("Result:", user_input)
+for i in range(5):
+    print(i, user_input)
