@@ -1,0 +1,1 @@
+user_input = input(); cursor.execute("SELECT * FROM users WHERE id = " + user_input)
